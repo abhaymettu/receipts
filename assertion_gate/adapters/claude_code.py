@@ -106,7 +106,7 @@ def _segment(records, previews=0):
 
     def start():
         return {"final_message": "", "receipts": [], "uuid": None,
-                "session_id": None, "timestamp_ms": 0}
+                "session_id": None, "timestamp_ms": 0, "prompt": ""}
 
     for rec in records:
         kind = rec.get("type")
@@ -119,6 +119,7 @@ def _segment(records, previews=0):
             cur = start()
             cur["session_id"] = rec.get("session_id") or rec.get("sessionId")
             cur["timestamp_ms"] = _ts(rec)
+            cur["prompt"] = "\n".join(b.get("text", "") for b in blocks if b.get("type") == "text")
             continue
 
         if cur is None:  # transcript opens mid-turn (resume, compaction)

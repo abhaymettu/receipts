@@ -17,8 +17,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from assertion_gate.adapters.claude_code import parse  # noqa: E402
 
-FULL = 200000        # flagged-turn receipt output, effectively untruncated
-PRIOR = 1500         # per-receipt preview for earlier turns
+FULL = 20000         # flagged-turn receipt output cap per receipt (practically untruncated)
+PRIOR = 400          # per-receipt preview for earlier turns
 
 
 def find_session(basename):
@@ -72,7 +72,8 @@ def main(argv):
         else:
             i, t, named = hit
             entry["turn_found"] = True
-            parts += ["## Message the agent sent (turn %d of %d)" % (i + 1, len(named)), "",
+            parts += ["## User prompt for this turn (first 3000 chars)", "", t["prompt"][:3000], "",
+                      "## Message the agent sent (turn %d of %d)" % (i + 1, len(named)), "",
                       t["final_message"], "",
                       "## Receipts in this turn (%d, untruncated)" % len(t["receipts"]), "",
                       receipt_lines(t["receipts"], FULL), "",
