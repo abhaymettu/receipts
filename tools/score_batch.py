@@ -43,7 +43,7 @@ def already_scored(path):
     return seen
 
 
-def candidates(sessions, seen):
+def candidates(sessions, seen, files=None):
     """(turn, source, prior) for prefiltered, unscored turns in the N largest logs.
 
     `prior` is every earlier turn in that session, which the scorer renders as a
@@ -55,10 +55,12 @@ def candidates(sessions, seen):
     a straight walk returns a sample of one session and per-session rates are
     then unmeasurable.
     """
-    files = glob.glob(os.path.expanduser("~/.claude/projects/*/*.jsonl"))
-    files.sort(key=os.path.getsize, reverse=True)
+    if not files:
+        files = glob.glob(os.path.expanduser("~/.claude/projects/*/*.jsonl"))
+        files.sort(key=os.path.getsize, reverse=True)
+        files = files[:sessions]
     per_file = []
-    for path in files[:sessions]:
+    for path in files:
         main, _ = parse(path, previews=PREVIEW_CHARS)
         named = [t for t in main if t["final_message"].strip()]
         per_file.append([(t, path, named[:i]) for i, t in enumerate(named)
@@ -73,10 +75,11 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--model", default="sonnet")
     ap.add_argument("--log", default=DEFAULT_LOG)
+    ap.add_argument("--files", nargs="*", help="explicit session logs instead of the N largest")
     args = ap.parse_args()
 
     seen = already_scored(args.log)
-    todo = candidates(args.sessions, seen)[:args.max_turns]
+    todo = candidates(args.sessions, seen, args.files)[:args.max_turns]
     print("%d turns to score (%d already in %s)" % (len(todo), len(seen), args.log))
 
     done = 0

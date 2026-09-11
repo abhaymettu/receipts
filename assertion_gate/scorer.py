@@ -18,6 +18,9 @@ import time
 from .taxonomy import PRAMANA, TYPES, normalize_type, valid
 
 DEFAULT_LOG = os.path.expanduser("~/.claude/assertion-gate/verdicts.jsonl")
+# Directory the model call runs in. Batch runs set this to a fresh empty dir so
+# the judge inherits no project instructions, memory, or hooks from the cwd.
+WORKSPACE = os.environ.get("ASSERTION_GATE_WORKSPACE")
 PREVIEW_CHARS = 700
 HISTORY_TURNS = 8          # how many earlier turns of receipts to carry
 HISTORY_PREVIEW = 160      # per-receipt preview in the history block
@@ -122,7 +125,8 @@ def ask(prompt, model="sonnet", timeout=180):
         proc = subprocess.run(
             ["claude", "-p", "--strict-mcp-config", "--allowed-tools", "",
              "--model", model, prompt],
-            capture_output=True, text=True, timeout=timeout, stdin=subprocess.DEVNULL)
+            capture_output=True, text=True, timeout=timeout, stdin=subprocess.DEVNULL,
+            cwd=WORKSPACE)
     except (OSError, subprocess.TimeoutExpired):
         return ""
     return proc.stdout if proc.returncode == 0 else ""
