@@ -62,9 +62,11 @@ def candidates(sessions, seen, files=None):
     per_file = []
     for path in files:
         main, _ = parse(path, previews=PREVIEW_CHARS)
-        named = [t for t in main if t["final_message"].strip()]
-        per_file.append([(t, path, named[:i]) for i, t in enumerate(named)
-                         if t["uuid"] not in seen and prefilter(t["final_message"])[0]])
+        # prior is every earlier turn, including ones that ended in a tool call
+        # with no text: their receipts are evidence too.
+        per_file.append([(t, path, main[:i]) for i, t in enumerate(main)
+                         if t["final_message"].strip() and t["uuid"] not in seen
+                         and prefilter(t["final_message"])[0]])
     return [item for row in zip_longest(*per_file) for item in row if item]
 
 

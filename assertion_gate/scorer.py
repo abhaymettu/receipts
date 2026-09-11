@@ -197,10 +197,9 @@ def main(argv):
         elif a == "--model":
             model = argv[i + 1]
 
-    main_turns, _ = parse(path, previews=PREVIEW_CHARS)
-    turns = [t for t in main_turns if t["final_message"].strip()]
-    chosen = ([(i, t) for i, t in enumerate(turns) if t["uuid"] == uuid]
-              if uuid else list(enumerate(turns))[-1:])
+    turns, _ = parse(path, previews=PREVIEW_CHARS)
+    named = [(i, t) for i, t in enumerate(turns) if t["final_message"].strip()]
+    chosen = [(i, t) for i, t in named if t["uuid"] == uuid] if uuid else named[-1:]
     written = sum(score_and_log(t, path, model, out, turns[:i]) for i, t in chosen)
     print("scored %d turn(s), wrote %d verdict(s) to %s" % (len(chosen), written, out))
     return 0

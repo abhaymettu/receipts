@@ -52,6 +52,15 @@ overclaims of the report itself. The corrected rate is 26.0%.
 | `ab_v3.json` | A/B arm: v3 scorer (history alone) on the same 22 turns | ~50 |
 | `rubric.json` | Standalone scoring rubric: claim types, pramana labels, verdict definitions, adjudication protocol | - |
 | `analysis.json` | Computed statistics: CIs, McNemar's test, per-type breakdown, error analysis | - |
+| `fullset_v3_batch2.json` | Batch 2: v3 verdicts on 4 headless sessions (see "Batches 2 and 3") | 35 |
+| `reports/labels_batch2.json` | Batch 2 first-pass labels, superseded: assigned from scorer rationale, all `overclaim` | 31 |
+| `reports/second_adjudication_batch2.json` | Batch 2 second rater, blind to receipts; the kappa = 0 result | 31 |
+| `reports/labels_batch2_strict.json` | Batch 2 re-labelled under `docs/adjudication-strict.md` | 31 |
+| `fullset_v3_batch3.json` | Batch 3: v3 verdicts on 6 interactive coding sessions, 39 turns | 544 |
+| `label_candidates_batch3.json` | Batch 3 rows the scorer flagged `unsupported` | 119 |
+| `reports/labels_batch3.json` | Batch 3 labels: two-rater gate, receipt adjudication, 30-claim second rating | 119 |
+| `reports/raters/` | Every rater's raw output for batches 2 and 3, so each kappa is recomputable | - |
+| `reports/frozen_labels.json` | Batch 1 + first-pass batch 2 as frozen on 2026-09-05; kept for the record, the batch 2 rows are superseded | 81 |
 
 ## Schema
 
@@ -107,7 +116,7 @@ receipts.
 
 Ground truth labels distinguish four outcomes:
 - **overclaim** (13/50): the claim is genuinely unsupported by any receipt
-- **fp_turn_scope** (24/50): the checker flagged it, but evidence exists in an
+- **fp_turn_scope** (25/50): the checker flagged it, but evidence exists in an
   earlier turn the scorer did not see (v1) or mis-weighted (v3)
 - **fp_evidence_missed** (9/50): the checker had the evidence in-turn but
   failed to match it to the claim

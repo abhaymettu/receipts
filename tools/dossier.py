@@ -57,8 +57,9 @@ def main(argv):
             path = find_session(base)
             cache[base] = None
             if path:
-                named = [t for t in parse(path, previews=FULL)[0] if t["final_message"].strip()]
-                cache[base] = {t["uuid"]: (i, t, named) for i, t in enumerate(named)}
+                turns = parse(path, previews=FULL)[0]
+                cache[base] = {t["uuid"]: (i, t, turns) for i, t in enumerate(turns)
+                               if t["final_message"].strip()}
         entry = {"n": n, "turn_uuid": row["turn_uuid"], "claim": row["claim"],
                  "type": row["type"], "source": base, "tool_calls": row["tool_calls"],
                  "dossier": "%s/%d.md" % (out_dir, n)}
@@ -70,7 +71,7 @@ def main(argv):
             parts.append("SESSION FILE OR TURN NOT FOUND ON DISK - receipts unavailable.")
             entry["turn_found"] = False
         else:
-            i, t, named = hit
+            i, t, named = hit  # named is every turn here, text or not
             entry["turn_found"] = True
             parts += ["## User prompt for this turn (first 3000 chars)", "", t["prompt"][:3000], "",
                       "## Message the agent sent (turn %d of %d)" % (i + 1, len(named)), "",
