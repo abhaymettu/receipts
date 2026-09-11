@@ -78,9 +78,8 @@ def main():
         o = sum(1 for r in lab if r["source"] == s_ and r["label"] == "overclaim")
         tot = sum(1 for r in rows if os.path.basename(r["source"]) == s_)
         print("  %s claims %3d flagged %3d overclaim %3d" % (s_[:8], tot, k, o))
-    sec = load("reports/raters/stepB_batch3_second.json")
-    prim = {r["turn_uuid"] + "|" + r["claim"]: r["label"] for r in lab}
-    pairs = [(prim[p["turn_uuid"] + "|" + p["claim"]], p["label"]) for p in sec]
+    sec = sum((load("reports/raters/stepB_batch3_second_reread_part%d.json" % j) for j in (0, 1)), [])
+    pairs = [(lab[p["n"] - 1]["label"], p["label"]) for p in sec]   # n is 1-based row index into labels
     po, k = kappa([p[0] for p in pairs], [p[1] for p in pairs])
     oc_or_not = lambda l: "overclaim" if l == "overclaim" else "not"  # noqa: E731
     po2, k2 = kappa([oc_or_not(x) for x, _ in pairs], [oc_or_not(y) for _, y in pairs])

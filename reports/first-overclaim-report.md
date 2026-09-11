@@ -290,3 +290,29 @@ Three limits on how far these numbers generalise:
    24 receipts, non-empty final message), but the measurement below covers main
    turns only.
 
+
+
+## Addendum, 2026-09-11: batches 2 and 3
+
+Batch 2 (31 candidates, 4 sessions) and batch 3 (544 claims, 119 candidates,
+6 sessions) are reported in `BATCH3-REPORT.md`; the figures are recomputed by
+`tools/report_batch3.py`. Three things in that report bear on this one.
+
+1. **The second-adjudicator kappa of 0.000 on batch 2 was an artifact.** The
+   first pass labelled every row `overclaim`; kappa against a single-class rater
+   is zero regardless of the second rater. The second rater also never saw a
+   receipt. Under the strict protocol batch 2 has zero confirmed overclaims: all
+   four sessions were headless one-turn jobs with no tools, and their "claims"
+   were merged user-supplied text.
+
+2. **History was incomplete in every scorer run reported above.** The batch
+   driver and the full-set re-scorer built history from turns that ended in
+   assistant text only, dropping every receipt in a turn that ended in a tool
+   call. The batch 1 labels are unaffected (assigned from raw files); the v1/v3
+   scorer verdicts above, and the fp_turn_scope split, were produced under that
+   gap. Fixed for future runs; not re-scored.
+
+3. **Precision is population-specific.** v3 flag precision is 38.1% on the
+   batch 1 sessions, 9.2% on batch 3's long autonomous lanes, and undefined on
+   batch 2. The 26.0% confirmed rate and the ~11% estimated true rate above are
+   statements about batch 1's population only.

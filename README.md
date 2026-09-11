@@ -188,6 +188,47 @@ rather than a scoring error. One was scored uncheckable due to ambiguous evidenc
 by the measured precision (39.1%), the estimated true overclaim rate is
 approximately 11.0% (range 6.2-16.6%) of extracted claims.
 
+## Batches 2 and 3 (added 2026-09-11)
+
+Full detail, with every number recomputable by `tools/report_batch3.py`, is in
+`BATCH3-REPORT.md`. The short version:
+
+**Batch 2 measured the wrong population and its kappa measured nothing.** All
+four batch 2 sessions were headless one-turn `claude -p` jobs (a nudge
+generator, a daily-summary merger, a text-ack classifier) with zero tool calls
+anywhere. The first-pass labels transcribed the scorer's rationale and set all
+31 candidates to `overclaim`. A second adjudicator that saw only claim text
+returned kappa = 0.000 at 54.8% agreement; kappa against a single-class rater is
+zero by construction, whatever the second rater says. Re-labelled under
+`docs/adjudication-strict.md` (two blind gate raters, kappa 0.723, then a third
+read with the user prompt visible): 27 `fp_not_a_claim`, 4
+`unadjudicable_missing_source`, zero confirmed overclaims. The batch 2 rows in
+`frozen_labels.json` are superseded by `reports/labels_batch2_strict.json`.
+
+**Batch 3: 6 interactive coding sessions, 39 turns, 544 claims, 119 flagged.**
+Two-rater gate (kappa 0.905), receipt adjudication with complete session
+history, a 30-claim receipt-visible second rating (agreement 90%, kappa
+0.845). Final: 11 `overclaim`, 47
+`fp_turn_scope`, 37 `fp_evidence_missed`, 18 `uncheckable`, 6
+`fp_not_a_claim`. Flag precision 9.2% (Wilson 95% 5.2-15.8%); confirmed
+overclaims 2.0% of extracted claims (1.1-3.6%).
+
+**Why batch 3 precision is a quarter of batch 1's.** Adjudication surfaced a
+history bug: the batch tooling carried only turns that ended in assistant text
+as history, so receipts in turns that ended in a tool call were invisible to the
+scorer and, at first, to the adjudicators. On long autonomous sessions that is
+most receipts. Re-reading with complete history moved 17 of 38 first-read
+overclaims to `fp_turn_scope`. The scorer's flags were produced with the same
+gap plus its own 8-turn / 6000-character cap, and 42% of its checkable flags are
+`fp_turn_scope`. The fix is in the scorer and batch driver; the batches have not
+yet been re-scored under it.
+
+**Distribution-shift caveat.** Three batches are three populations: mid-length
+interactive coding (precision 38%), headless no-tool jobs (nothing checkable),
+long autonomous lanes with hundreds of receipts (9%). No single overclaim rate
+for "Claude Code sessions" is supported by this data; rates are per population,
+and the population must be named.
+
 ## Related work
 
 **Synthetic hallucination benchmarks.** HaluEval (Li et al., EMNLP 2023) generates
@@ -228,9 +269,11 @@ epistemology as formalized for LLMs in the Pramana fine-tuning work
    rests on receipts earlier passes did not read, which is a reason to prefer
    it, not a guarantee. Wilson CIs are wide: precision [22.2%, 59.2%] for v3.
 
-3. **Single adjudicator.** All 50 labels were assigned by one person.
-   Inter-rater reliability is unmeasured. The adjudication protocol (read all
-   receipts in all turns) is designed to be reproducible by a second rater.
+3. **Single adjudicator for batch 1.** All 50 batch 1 labels were assigned by
+   one person. Batches 2 and 3 use two blind gate raters (kappa 0.723 and
+   0.905) and, for batch 3, a receipt-visible second rater on a 30-claim
+   subset; see `BATCH3-REPORT.md`. Raters for batches 2 and 3 were model
+   sessions following `docs/adjudication-strict.md`, not people.
 
 4. **Subagent turns excluded.** Subagent transcripts are separate files; the
    measurement covers main session turns only.
@@ -238,11 +281,17 @@ epistemology as formalized for LLMs in the Pramana fine-tuning work
 5. **Receipts verify claims against tool outputs, not tool outputs against the
    world.** A tool that lies produces receipt-valid misinformation.
 
-6. **16% no-match rate.** v3 did not produce a verdict for 52 of 324 claims
+6. **History window.** Through batch 3 the scorer's history block omitted
+   every earlier turn that ended in a tool call rather than text, on top of its
+   8-turn / 6000-character cap. On long sessions most support lives there; 42%
+   of batch 3 flags were `fp_turn_scope`. Fixed in the scorer and batch driver
+   on 2026-09-11; not yet re-scored.
+
+7. **16% no-match rate.** v3 did not produce a verdict for 52 of 324 claims
    that v1 extracted. Three of four v3 false negatives were no-match, indicating
    this is the primary recall bottleneck.
 
-7. **No cross-harness validation.** All sessions are Claude Code. The herdr
+8. **No cross-harness validation.** All sessions are Claude Code. The herdr
    adapter exists but has not been used to produce labelled data.
 
 ## Ethical considerations
