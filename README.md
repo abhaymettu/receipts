@@ -14,6 +14,10 @@ size_categories:
 
 # assertion-gate: Real-world overclaim detection in AI agent sessions
 
+**One in nine claims an AI agent makes about the world is not backed by its own tool receipts.** 324 claims from 5 real Claude Code sessions, each checked against that session's receipts, give an estimated true overclaim rate near 11%. [claimcheck](https://abhaymettu.com/research/claimcheck/) runs the same check live, as a proxy in front of the model.
+
+Write-up: [abhaymettu.com/research/assertion-gate](https://abhaymettu.com/research/assertion-gate/) · Dataset: [Hugging Face](https://huggingface.co/datasets/abhaymettu/assertion-gate)
+
 ## Dataset description
 
 This dataset contains claim-level verdicts from scoring 534 real Claude Code sessions
