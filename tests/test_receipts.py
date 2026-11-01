@@ -178,3 +178,10 @@ def test_install_by_copying_into_place_is_supported(tmp_path):
 def test_heredoc_body_is_not_a_test_run(tmp_path):
     t = Transcript().user("log").bash("cat >> RUNLOG.md <<'EOF'\nran pytest, all green\nEOF").say("All tests pass.")
     assert verdicts(tmp_path, t) == [("test_pass", "unbacked")]
+
+
+def test_works_needs_a_run_that_bears_on_the_claim(tmp_path):
+    t = Transcript().user("fix").edit("/w/a.py").bash("git add -A", "").say("The bug is fixed.")
+    assert verdicts(tmp_path, t) == [("works", "unbacked")]
+    t = Transcript().user("fix").edit("/w/a.py").bash("pytest -q", "3 passed").say("The bug is fixed.")
+    assert verdicts(tmp_path, t) == [("works", "supported")]

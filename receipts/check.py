@@ -152,6 +152,25 @@ def _observes(c):
     return _executes(c) or bool(OBSERVE_TOOLS.match(c.tool)) or (bool(c.cmd) and not c.paths)
 
 
+_TICKED = re.compile(r"`([^`\n]{2,})`")
+
+
+def _objects(claim):
+    """What a claim names: backticked tokens and file basenames."""
+    names = [os.path.basename(f.rstrip("/")) for f in claim.files]
+    return [n.lower() for n in names + _TICKED.findall(claim.text) if len(n) >= 3]
+
+
+def _relevant(claim, c):
+    """A run that bears on the claim: a test or build, a look at a page, or one naming its object."""
+    if c.cmd and (rules.TEST.search(rules.shape(c.cmd)) or rules.BUILD.search(rules.shape(c.cmd))):
+        return True
+    if re.search(r"playwright|preview_|browser|device_|screenshot", c.tool):
+        return True
+    text = ("%s\n%s" % (c.cmd, c.output[:4000])).lower()
+    return any(o in text for o in _objects(claim))
+
+
 def _after_change(claim, calls, last_write, test, label):
     """Works / verified / ran: something has to have run or looked after the last change."""
     if claim.kind == "ran" and claim.files:
@@ -167,6 +186,10 @@ def _after_change(claim, calls, last_write, test, label):
     later = [c for c in pool if c.idx > last_write]
     if not later:
         return UNBACKED, "nothing was %s after the last code change" % label, pool[-1].idx, "stale"
+    if claim.kind == "works":
+        later = [c for c in later if _relevant(claim, c)]
+        if not later:
+            return UNBACKED, "nothing that ran after the last change exercises this claim", -1, "none"
     return SUPPORTED, "%s after the last change: %s" % (
         label, (later[-1].cmd or later[-1].tool).strip().splitlines()[0][:80]), later[-1].idx, "direct"
 
