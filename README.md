@@ -9,9 +9,9 @@
 made. Each claim comes back **supported**, **contradicted** or **unbacked**. It runs on demand or as a Claude
 Code Stop hook that sends the agent back to work when a claim has no receipt.
 
-About 13% of the claims in my real sessions had no receipt behind them, mostly "it works" and "tests pass",
-and more often in long sessions. I built this to measure that. Pattern rules can't find them reliably. A model reading
-the receipts can. The [paper](paper/main.pdf) has the details.
+I built it because agents say "it works" and "tests pass" without having checked, and you only find out later.
+It happens more in long sessions. In my own sessions about 13% of the claims had no receipt behind them. Pattern
+rules can't find them reliably; a model reading the receipts can. The [paper](paper/main.pdf) has the details.
 
 ## Install
 
