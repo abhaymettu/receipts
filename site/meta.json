@@ -1,0 +1,40 @@
+{
+  "title": "Claims without receipts",
+  "summary": "How often coding agents claim work their own tool calls don't back (13% of claims in 2,301 real sessions), and a Stop hook that checks.",
+  "repo": "https://github.com/abhaymettu/receipts",
+  "paper_pdf": "paper/main.pdf",
+  "hero_image": "docs/hero.png",
+  "numbers": [
+    {
+      "value": "13.3%",
+      "label": "of 2,082 hand-labelled claims not backed by the agent's own receipts (95% CI 11.3 to 15.4)",
+      "command": "python3 bench/stats.py",
+      "source": "results/benchmark.json: labels.not_supported"
+    },
+    {
+      "value": "36.8%",
+      "label": "of \"it works / it's fixed\" claims not backed",
+      "command": "python3 bench/stats.py",
+      "source": "results/benchmark.json: labels.by_family.works"
+    },
+    {
+      "value": "0.045 / 0.024",
+      "label": "flag precision / recall of deterministic receipt rules on held-out turns",
+      "command": "python3 bench/score.py test",
+      "source": "results/validity_test.json: end_to_end_flag_precision, end_to_end_flag_recall"
+    },
+    {
+      "value": "0.557",
+      "label": "flag precision of a Sonnet judge reading the receipts (recall 0.315)",
+      "command": "python3 bench/score.py judge:S",
+      "source": "results/validity_judge_S.json: end_to_end_flag_precision"
+    },
+    {
+      "value": "7.2 ms",
+      "label": "median rules-hook latency over 2,301 sessions",
+      "command": "python3 bench/hook_cost.py",
+      "source": "results/hook_cost.json: ms_p50"
+    }
+  ],
+  "rerun_note": "The bench commands read the author's private session logs; they rerun only on his machine. `receipts demo` runs anywhere."
+}

@@ -8,3 +8,4 @@ dist/
 .venv/
 paper/*.aux
 paper/*.log
+.hillclimb/
