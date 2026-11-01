@@ -1,3 +1,10 @@
 __pycache__/
 *.pyc
 *.log
+/data/
+*.egg-info/
+build/
+dist/
+.venv/
+paper/*.aux
+paper/*.log

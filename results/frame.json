@@ -1,0 +1,17 @@
+{
+  "candidates": 5922,
+  "included": 2301,
+  "by_reason": {
+    "claude-code:after_cutoff": 8,
+    "claude-code:included": 2267,
+    "claude-code:no_calls_or_reports": 2421,
+    "claude-code:private_project": 1051,
+    "claude-code:test_sandbox": 116,
+    "codex:included": 34,
+    "codex:no_calls_or_reports": 22,
+    "codex:private_project": 3
+  },
+  "cutoff_utc": "2026-11-01T10:00:00+00:00",
+  "included_turns": 7169,
+  "included_calls": 88379
+}
