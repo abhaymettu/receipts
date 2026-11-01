@@ -25,3 +25,10 @@ Lane: receipts (2026-11-01). Turn assertion-gate into an installable claim check
 - Rules climb (15 rounds, `.hillclimb/results.tsv`): dev flag F1 0.088 -> 0.201 (LLM extraction). On TEST the rules do not hold: flag precision 0.083, recall 0.153, verdict kappa ~0 (`results/validity_test_llm.json`; regex extraction `results/validity_test.json`). Main finding: deterministic receipt rules (the mechanism of proof-of-done, honestly, groundtruth) do not find unbacked claims in real sessions.
 - Added `receipts judge` (model reads the dossier under `receipts/rubric.md`) and `RECEIPTS_ENGINE=judge` for the hook. Sonnet judge (rater S) and Haiku judge (rater H) running on test; score with `python3 bench/score.py judge:S` / `judge:H`.
 - Next: judge scores -> decide hook default; `bench/stats.py`; writer subagent for paper (tectonic), README, site/*, SUBMIT.md; humanizer + inmyvoice; gitleaks; rename repo to receipts; push; fresh-clone proof.
+
+## 2026-11-01 06:40 CST (finish)
+- Judge scores on test: Sonnet e2e flag P 0.557 R 0.315, verdict kappa 0.52; Haiku P 0.307 R 0.524. Hook default is now the judge engine; rules stay as `--engine rules`.
+- Paper: `paper/main.tex` -> `paper/main.pdf` (tectonic, 9 pages), "Claims Without Receipts: How Often Coding Agents' Reports Go Unbacked, and Why Receipt Rules Cannot Tell". `paper/NUMBERS.md` maps each number to a results key; `paper/SUBMIT.md` has the arXiv steps (not submitted).
+- README, `site/writeup.md`, `site/meta.json`, `site/launch-post.md` (draft, not posted). humanizer pass, then inmyvoice: README 90 -> 100 (fixed a colon reveal and a trailing rhythm line), writeup 100, launch post 100.
+- Privacy: `bench/frame.py` named the excluded private projects in its regex. Moved the terms to gitignored `data/exclude_terms.txt` and rewrote the 15 unpushed commits so no public commit carries them; pushed history was already clean. `.hillclimb/` added to .gitignore. gitleaks: no leaks. Added LICENSE (MIT).
+- Tests: 33 passed.
