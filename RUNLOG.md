@@ -17,3 +17,11 @@ Lane: receipts (2026-11-01). Turn assertion-gate into an installable claim check
 - Hook cost over 2,301 sessions: p50 7.2 ms, p99 43 ms (`results/hook_cost.json`).
 - Partial label prevalence: 13.3% of claims not backed (565 claims).
 - Next: finish climb, adjudicate test, `bench/score.py test` + `agreement`, `bench/stats.py`, paper, README, site files, rename repo to receipts, push.
+
+## 2026-11-01 06:10 CST (handoff point)
+- Test gold: 175 turns, 950 claims (A and B agreed on 745; adjudicator C ruled 239 disputes; author audited 40 rulings, agreed with 37, reversed 3 scope errors: `data/label/overrides.json`, `results/adjudication_audit.json`).
+- Inter-rater (A vs B, test): claim-set F1 0.888, verdict kappa 0.739, flag kappa 0.757 (`results/validity_agreement.json`).
+- Prevalence from labels (400 turns, 2,082 claims, 293 sessions): 13.3% not backed, 95% CI 11.3 to 15.4 (session bootstrap). works 36.8%, tests 22.5%, verified 14.3%, files 11.9%, ran 5.5%, git 3.9%. 1-9 calls 5.1% vs 10+ calls 13 to 20%. Contradicted only 5 of 2,082 (`results/benchmark.json`).
+- Rules climb (15 rounds, `.hillclimb/results.tsv`): dev flag F1 0.088 -> 0.201 (LLM extraction). On TEST the rules do not hold: flag precision 0.083, recall 0.153, verdict kappa ~0 (`results/validity_test_llm.json`; regex extraction `results/validity_test.json`). Main finding: deterministic receipt rules (the mechanism of proof-of-done, honestly, groundtruth) do not find unbacked claims in real sessions.
+- Added `receipts judge` (model reads the dossier under `receipts/rubric.md`) and `RECEIPTS_ENGINE=judge` for the hook. Sonnet judge (rater S) and Haiku judge (rater H) running on test; score with `python3 bench/score.py judge:S` / `judge:H`.
+- Next: judge scores -> decide hook default; `bench/stats.py`; writer subagent for paper (tectonic), README, site/*, SUBMIT.md; humanizer + inmyvoice; gitleaks; rename repo to receipts; push; fresh-clone proof.
