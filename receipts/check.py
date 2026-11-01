@@ -80,6 +80,8 @@ def _gate(claim, calls, last_write, rx, what, fallback=None):
             what, cmd, _snippet(last.output) or _snippet("\n".join(c.output for c in after)) or "non-zero exit"), last.idx, "direct"
     if result == "unknown":
         return UNBACKED, "the last %s run's result never came back: `%s`" % (what, cmd), last.idx, "none"
+    if what == "test" and not rules.PASSED.search(last.output) and not after:
+        return UNBACKED, "the last test run printed no result: `%s`" % cmd, last.idx, "none"
     if last_write > last.idx:
         return UNBACKED, "code changed after the last %s run (`%s`)" % (what, cmd), last.idx, "stale"
     return SUPPORTED, "`%s` passed after the last code change" % cmd, last.idx, "direct"

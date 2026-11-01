@@ -193,3 +193,9 @@ def test_verified_needs_a_check_that_names_what_was_verified(tmp_path):
     t = Transcript().user("fix").edit("/w/a.py").bash("python3 -c 'from a import slugify'", "ok").say(
         "I verified `slugify` handles spaces.")
     assert ("verified", "supported") in verdicts(tmp_path, t)
+
+
+def test_a_test_run_that_prints_no_result_backs_nothing(tmp_path):
+    t = Transcript().user("fix").edit("/w/a.py").bash("python3 scripts/tests_setup.py", "wrote config").say(
+        "All tests pass.")
+    assert verdicts(tmp_path, t) == [("test_pass", "unbacked")]
