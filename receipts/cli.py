@@ -100,7 +100,7 @@ def scan(dirs, days=None, as_json=False):
                                               100.0 * (total[UNBACKED] + total[CONTRADICTED]) / n))
 
 
-def install_hook(project=False, mode="block", engine="rules"):
+def install_hook(project=False, mode="block", engine="judge"):
     path = os.path.join(".claude", "settings.json") if project else os.path.expanduser("~/.claude/settings.json")
     try:
         with open(path) as fh:
@@ -142,7 +142,7 @@ def main(argv=None):
     i = sub.add_parser("install-hook")
     i.add_argument("--project", action="store_true", help="write .claude/settings.json here, not ~/.claude")
     i.add_argument("--mode", choices=["block", "warn", "log"], default="block")
-    i.add_argument("--engine", choices=["rules", "judge"], default="rules")
+    i.add_argument("--engine", choices=["rules", "judge"], default="judge")
     a = ap.parse_args(argv)
 
     if a.cmd == "demo":

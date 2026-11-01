@@ -9,8 +9,8 @@ says the claim is unverified. It speaks at most once per turn (`stop_hook_active
   RECEIPTS_MODE=warn    let the turn end, show the user a warning
   RECEIPTS_MODE=log     say nothing, append findings to ~/.claude/receipts/log.jsonl
 
-  RECEIPTS_ENGINE=rules (default) regex claims, deterministic rules, milliseconds
-  RECEIPTS_ENGINE=judge a model reads the receipts (RECEIPTS_MODEL, default sonnet);
+  RECEIPTS_ENGINE=rules  regex claims, deterministic rules, milliseconds, low precision
+  RECEIPTS_ENGINE=judge  (default) a model reads the receipts (RECEIPTS_MODEL, default sonnet);
                         tens of seconds per turn, far more accurate on real sessions
 """
 
@@ -73,7 +73,7 @@ def main(stdin=sys.stdin, stdout=sys.stdout):
         return 0
     mode = os.environ.get("RECEIPTS_MODE", "block").lower()
     try:
-        if os.environ.get("RECEIPTS_ENGINE", "rules") == "judge":
+        if os.environ.get("RECEIPTS_ENGINE", "judge") == "judge":
             session, findings = judged_findings(path, event.get("last_assistant_message"),
                                                 os.environ.get("RECEIPTS_MODEL", "sonnet"))
         else:

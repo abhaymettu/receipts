@@ -1,0 +1,71 @@
+{
+ "turns": 175,
+ "gold_claims": 950,
+ "system_claims": 925,
+ "matched": 770,
+ "extraction_precision": [
+  0.8324324324324325,
+  [
+   0.807,
+   0.8551
+  ]
+ ],
+ "extraction_recall": [
+  0.8105263157894737,
+  [
+   0.7844,
+   0.8342
+  ]
+ ],
+ "verdict_accuracy_on_matched": [
+  0.9233766233766234,
+  [
+   0.9024,
+   0.9401
+  ]
+ ],
+ "verdict_kappa_on_matched": 0.5205,
+ "checker_flag_precision_on_matched": [
+  0.8125,
+  [
+   0.6806,
+   0.8981
+  ]
+ ],
+ "checker_flag_recall_on_matched": [
+  0.4588235294117647,
+  [
+   0.357,
+   0.5642
+  ]
+ ],
+ "end_to_end_flag_precision": [
+  0.5571428571428572,
+  [
+   0.4408,
+   0.6675
+  ]
+ ],
+ "end_to_end_flag_recall": [
+  0.31451612903225806,
+  [
+   0.2394,
+   0.4008
+  ]
+ ],
+ "confusion_sys_by_gold": {
+  "contradicted|supported": 3,
+  "contradicted|unbacked": 2,
+  "supported|supported": 676,
+  "supported|unbacked": 46,
+  "unbacked|contradicted": 2,
+  "unbacked|supported": 6,
+  "unbacked|unbacked": 35
+ },
+ "flag_counts": {
+  "sys_flag_false": 31,
+  "sys_flag_true": 39,
+  "gold_flag_caught": 39,
+  "gold_flag_missed": 85
+ }
+}

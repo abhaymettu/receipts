@@ -141,6 +141,7 @@ def test_codex_rollout(tmp_path):
 
 def _run_hook(event, mode="block"):
     os.environ["RECEIPTS_MODE"] = mode
+    os.environ["RECEIPTS_ENGINE"] = "rules"
     out = io.StringIO()
     hook.main(io.StringIO(json.dumps(event)), out)
     return json.loads(out.getvalue()) if out.getvalue() else None

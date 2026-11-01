@@ -219,23 +219,23 @@
   "reported_turns": 5180,
   "claims": 4647,
   "verdicts": {
-   "unbacked": 743,
-   "supported": 3819,
+   "unbacked": 1417,
+   "supported": 3145,
    "contradicted": 85
   },
   "not_backed_basis": {
-   "none": 595,
+   "none": 1292,
    "direct": 85,
-   "stale": 148
+   "stale": 125
   },
   "not_backed": {
-   "rate": 0.1782,
+   "rate": 0.3232,
    "ci95": [
-    0.1637,
-    0.1937
+    0.3031,
+    0.3438
    ],
    "claims": 4647,
-   "flagged": 828,
+   "flagged": 1502,
    "sessions": 1298
   },
   "by_kind": {
@@ -310,13 +310,13 @@
     "sessions": 175
    },
    "test_pass": {
-    "rate": 0.2661,
+    "rate": 0.4807,
     "ci95": [
-     0.2261,
-     0.3108
+     0.4312,
+     0.53
     ],
     "claims": 778,
-    "flagged": 207,
+    "flagged": 374,
     "sessions": 474
    },
    "typecheck_pass": {
@@ -330,149 +330,149 @@
     "sessions": 18
    },
    "verified": {
-    "rate": 0.0269,
+    "rate": 0.5343,
     "ci95": [
-     0.0127,
-     0.044
+     0.4812,
+     0.5828
     ],
     "claims": 670,
-    "flagged": 18,
+    "flagged": 358,
     "sessions": 431
    },
    "works": {
-    "rate": 0.0553,
+    "rate": 0.4749,
     "ci95": [
-     0.0333,
-     0.0792
+     0.4095,
+     0.5363
     ],
     "claims": 398,
-    "flagged": 22,
+    "flagged": 189,
     "sessions": 294
    }
   },
   "by_model": {
    "claude-fable": {
-    "rate": 0.124,
+    "rate": 0.2438,
     "ci95": [
-     0.0746,
-     0.1744
+     0.1878,
+     0.3036
     ],
     "claims": 242,
-    "flagged": 30,
+    "flagged": 59,
     "sessions": 79
    },
    "claude-haiku": {
-    "rate": 0.3902,
+    "rate": 0.561,
     "ci95": [
-     0.2697,
-     0.5132
+     0.4353,
+     0.6883
     ],
     "claims": 82,
-    "flagged": 32,
+    "flagged": 46,
     "sessions": 54
    },
    "claude-opus": {
-    "rate": 0.1702,
+    "rate": 0.3273,
     "ci95": [
-     0.1542,
-     0.1868
+     0.3042,
+     0.3515
     ],
     "claims": 3532,
-    "flagged": 601,
+    "flagged": 1156,
     "sessions": 887
    },
    "claude-opus-4.x": {
-    "rate": 0.2154,
+    "rate": 0.4308,
     "ci95": [
-     0.0845,
-     0.3571
+     0.2143,
+     0.6429
     ],
     "claims": 65,
-    "flagged": 14,
+    "flagged": 28,
     "sessions": 27
    },
    "claude-sonnet": {
-    "rate": 0.1752,
+    "rate": 0.2589,
     "ci95": [
-     0.1439,
-     0.2114
+     0.2153,
+     0.307
     ],
     "claims": 645,
-    "flagged": 113,
+    "flagged": 167,
     "sessions": 228
    },
    "gpt (codex)": {
-    "rate": 0.481,
+    "rate": 0.5823,
     "ci95": [
-     0.2973,
-     0.6333
+     0.3898,
+     0.7238
     ],
     "claims": 79,
-    "flagged": 38,
+    "flagged": 46,
     "sessions": 21
    }
   },
   "by_length": {
    "1-9 calls": {
-    "rate": 0.3198,
+    "rate": 0.4964,
     "ci95": [
-     0.2703,
-     0.3684
+     0.4318,
+     0.5622
     ],
     "claims": 419,
-    "flagged": 134,
+    "flagged": 208,
     "sessions": 239
    },
    "10-49 calls": {
-    "rate": 0.1834,
+    "rate": 0.3216,
     "ci95": [
-     0.1616,
-     0.2057
+     0.2943,
+     0.35
     ],
     "claims": 1788,
-    "flagged": 328,
+    "flagged": 575,
     "sessions": 636
    },
    "200+ calls": {
-    "rate": 0.3462,
+    "rate": 0.4231,
     "ci95": [
-     0.1951,
-     0.4333
+     0.2857,
+     0.5306
     ],
     "claims": 52,
-    "flagged": 18,
+    "flagged": 22,
     "sessions": 9
    },
    "50-199 calls": {
-    "rate": 0.1457,
+    "rate": 0.2919,
     "ci95": [
-     0.1277,
-     0.1657
+     0.2635,
+     0.3213
     ],
     "claims": 2388,
-    "flagged": 348,
+    "flagged": 697,
     "sessions": 524
    }
   },
   "by_harness": {
    "claude-code": {
-    "rate": 0.1729,
+    "rate": 0.3187,
     "ci95": [
-     0.1588,
-     0.1871
+     0.299,
+     0.3386
     ],
     "claims": 4568,
-    "flagged": 790,
+    "flagged": 1456,
     "sessions": 1277
    },
    "codex": {
-    "rate": 0.481,
+    "rate": 0.5823,
     "ci95": [
-     0.2911,
-     0.6395
+     0.3881,
+     0.7303
     ],
     "claims": 79,
-    "flagged": 38,
+    "flagged": 46,
     "sessions": 21
    }
   }
