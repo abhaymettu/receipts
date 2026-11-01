@@ -164,8 +164,9 @@ def _objects(claim):
 
 
 def _relevant(claim, c):
-    """A run that bears on the claim: a test or build, a look at a page, or one naming its object."""
-    if c.cmd and (rules.TEST.search(rules.shape(c.cmd)) or rules.BUILD.search(rules.shape(c.cmd))):
+    """A run that bears on the claim: a test, a look at a page, or one naming its object.
+    A build only shows the code compiles, not that it behaves."""
+    if c.cmd and rules.TEST.search(rules.shape(c.cmd)):
         return True
     if re.search(r"playwright|preview_|browser|device_|screenshot", c.tool):
         return True

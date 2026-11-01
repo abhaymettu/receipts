@@ -199,3 +199,9 @@ def test_a_test_run_that_prints_no_result_backs_nothing(tmp_path):
     t = Transcript().user("fix").edit("/w/a.py").bash("python3 scripts/tests_setup.py", "wrote config").say(
         "All tests pass.")
     assert verdicts(tmp_path, t) == [("test_pass", "unbacked")]
+
+
+def test_a_build_alone_does_not_show_a_fix_works(tmp_path):
+    t = Transcript().user("fix").edit("/w/a.py").bash("xcodebuild -scheme App", "BUILD SUCCEEDED").say(
+        "The bug is fixed.")
+    assert verdicts(tmp_path, t) == [("works", "unbacked")]
