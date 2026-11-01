@@ -32,3 +32,39 @@ Lane: receipts (2026-11-01). Turn assertion-gate into an installable claim check
 - README, `site/writeup.md`, `site/meta.json`, `site/launch-post.md` (draft, not posted). humanizer pass, then inmyvoice: README 90 -> 100 (fixed a colon reveal and a trailing rhythm line), writeup 100, launch post 100.
 - Privacy: `bench/frame.py` named the excluded private projects in its regex. Moved the terms to gitignored `data/exclude_terms.txt` and rewrote the 15 unpushed commits so no public commit carries them; pushed history was already clean. `.hillclimb/` added to .gitignore. gitleaks: no leaks. Added LICENSE (MIT).
 - Tests: 33 passed.
+
+## 2026-11-01 06:39 CST: fresh-clone proof
+Published: main fast-forwarded from receipts-v1, then merged the old remote main tip (ef33807) with the ours strategy so its history stays reachable without a force push. Repo renamed assertion-gate -> receipts, description and topics set.
+Clean clone into a new temp dir, pipx with PIPX_HOME and PIPX_BIN_DIR inside it (PATH notice trimmed; tests run with the clone installed editable):
+
+```
+$ git clone https://github.com/abhaymettu/receipts
+$ pipx install git+https://github.com/abhaymettu/receipts
+creating virtual environment...
+determining package name from 'git+https://github.com/abhaymettu/receipts'...
+creating virtual environment...
+installing receipts from spec 'git+https://github.com/abhaymettu/receipts'...
+done! ✨ 🌟 ✨
+  installed package receipts 1.0.0, installed using Python 3.14.7
+  These apps are now available
+    - receipts
+$ receipts --version
+receipts 1.0.0
+$ receipts demo
+<tmp>/pipx/venvs/receipts/lib/python3.14/site-packages/receipts/samples/demo_session.jsonl  (claude-code, 2 turns, 6 tool calls)
+  turn 0   UNBACKED       works          Fixed the off-by-one in `tinyparse/ranges.py`: ranges are now inclusive, and reversed ranges count down.
+           -> nothing was run after the last code change
+  turn 0   ok             file_change    Updated `ranges.py` to step in either direction.
+           -> a receipt writes ranges.py
+  turn 0   CONTRADICTED   test_pass      All 12 tests pass.
+           -> last test run failed: `python -m pytest -q` -> FAILED tests/test_ranges.py::test_reverse - assert [] == [3, 2, 1]
+  turn 0   UNBACKED       commit         Committed the fix as `a41c9e2`.
+           -> commit a41c9e2 appears in no receipt
+  turn 1   ok             test_pass      Now 12 passed in 0.03s, and the fix is committed as `a41c9e2`.
+           -> `python -m pytest -q` passed after the last code change
+  turn 1   ok             commit         Now 12 passed in 0.03s, and the fix is committed as `a41c9e2`.
+           -> commit a41c9e2 appears in a receipt
+6 claims: 3 supported, 2 unbacked, 1 contradicted
+$ python -m pytest -q tests
+33 passed in 1.11s
+```
