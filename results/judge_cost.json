@@ -1,0 +1,30 @@
+{
+ "A": {
+  "model": "opus",
+  "turns": 400,
+  "seconds_median": 21.1,
+  "seconds_p90": 46.5,
+  "api_equivalent_usd_mean": 0.1616
+ },
+ "B": {
+  "model": "opus",
+  "turns": 175,
+  "seconds_median": 19.6,
+  "seconds_p90": 50.6,
+  "api_equivalent_usd_mean": 0.1626
+ },
+ "S": {
+  "model": "sonnet",
+  "turns": 175,
+  "seconds_median": 11.6,
+  "seconds_p90": 29.9,
+  "api_equivalent_usd_mean": 0.1043
+ },
+ "H": {
+  "model": "haiku",
+  "turns": 174,
+  "seconds_median": 16.4,
+  "seconds_p90": 68.8,
+  "api_equivalent_usd_mean": 0.0079
+ }
+}
