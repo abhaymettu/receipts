@@ -49,7 +49,7 @@ def _last_write(calls, cwd=""):
 
 
 def _runs(calls, rx):
-    return [c for c in calls if c.cmd and rx.search(c.cmd)]
+    return [c for c in calls if c.cmd and rx.search(rules.shape(c.cmd))]
 
 
 def _snippet(text, rx=rules.FAILED):
@@ -110,11 +110,9 @@ def _git(claim, calls):
 
 
 def _ship(claim, calls):
-    rx = rules.DEPLOY if claim.kind == "deployed" else rules.INSTALL
-    runs = _runs(calls, rx)
-    if claim.kind == "deployed":
-        runs += [c for c in _runs(calls, rules.PUSH)]
-        runs.sort(key=lambda c: c.idx)
+    extra = rules.PUSH if claim.kind == "deployed" else rules.PLACE
+    primary = rules.DEPLOY if claim.kind == "deployed" else rules.INSTALL
+    runs = [c for c in calls if c.cmd and (primary.search(rules.shape(c.cmd)) or extra.search(rules.shape(c.cmd)))]
     if not runs:
         return UNBACKED, "no %s command in this session" % claim.kind.rstrip("ed"), -1, "none"
     ok = [c for c in runs if rules.outcome(c) == "pass"]
@@ -201,13 +199,16 @@ def check_claim(claim, session):
                    reason=reason, evidence=evidence, basis=basis)
 
 
-def check_session(session, turns=None):
-    """[Verdict] for every claim in every report (or only the turns given)."""
+def check_session(session, turns=None, extractor=extract):
+    """[Verdict] for every claim in every report (or only the turns given).
+
+    `extractor(report, turn)` returns the claims; the default is the regex one.
+    """
     out = []
     for t in session.turns:
         if turns is not None and t.idx not in turns:
             continue
-        for claim in extract(t.report, t.idx):
+        for claim in extractor(t.report, t.idx):
             out.append(check_claim(claim, session))
     return out
 

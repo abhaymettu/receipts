@@ -1,0 +1,444 @@
+{
+ "labels": {
+  "turns_labelled": 103,
+  "claims": 565,
+  "claims_per_turn": 5.49,
+  "verdicts": {
+   "supported": 490,
+   "unbacked": 73,
+   "contradicted": 2
+  },
+  "not_supported_basis": {
+   "none": 65,
+   "direct": 2,
+   "stale": 8
+  },
+  "not_supported": {
+   "rate": 0.1327,
+   "ci95": [
+    0.0955,
+    0.1767
+   ],
+   "claims": 565,
+   "flagged": 75,
+   "sessions": 77
+  },
+  "by_family": {
+   "files": {
+    "rate": 0.0984,
+    "ci95": [
+     0.0502,
+     0.1594
+    ],
+    "claims": 193,
+    "flagged": 19,
+    "sessions": 53
+   },
+   "git": {
+    "rate": 0.0732,
+    "ci95": [
+     0.0,
+     0.1538
+    ],
+    "claims": 41,
+    "flagged": 3,
+    "sessions": 24
+   },
+   "ran": {
+    "rate": 0.0455,
+    "ci95": [
+     0.0095,
+     0.086
+    ],
+    "claims": 110,
+    "flagged": 5,
+    "sessions": 59
+   },
+   "ship": {
+    "rate": 0.0357,
+    "ci95": [
+     0.0,
+     0.1034
+    ],
+    "claims": 28,
+    "flagged": 1,
+    "sessions": 20
+   },
+   "tests": {
+    "rate": 0.2174,
+    "ci95": [
+     0.1081,
+     0.3529
+    ],
+    "claims": 46,
+    "flagged": 10,
+    "sessions": 17
+   },
+   "verified": {
+    "rate": 0.1522,
+    "ci95": [
+     0.0776,
+     0.2472
+    ],
+    "claims": 92,
+    "flagged": 14,
+    "sessions": 43
+   },
+   "works": {
+    "rate": 0.4894,
+    "ci95": [
+     0.2821,
+     0.6667
+    ],
+    "claims": 47,
+    "flagged": 23,
+    "sessions": 23
+   }
+  },
+  "by_model": {
+   "claude-fable": {
+    "rate": 0.3333,
+    "ci95": [
+     0.1333,
+     0.4324
+    ],
+    "claims": 24,
+    "flagged": 8,
+    "sessions": 6
+   },
+   "claude-opus": {
+    "rate": 0.1185,
+    "ci95": [
+     0.081,
+     0.1603
+    ],
+    "claims": 464,
+    "flagged": 55,
+    "sessions": 58
+   },
+   "claude-sonnet": {
+    "rate": 0.193,
+    "ci95": [
+     0.0563,
+     0.2769
+    ],
+    "claims": 57,
+    "flagged": 11,
+    "sessions": 8
+   }
+  },
+  "by_length": {
+   "1-9 calls": {
+    "rate": 0.0645,
+    "ci95": [
+     0.0,
+     0.1212
+    ],
+    "claims": 31,
+    "flagged": 2,
+    "sessions": 9
+   },
+   "10-49 calls": {
+    "rate": 0.1579,
+    "ci95": [
+     0.1098,
+     0.2097
+    ],
+    "claims": 209,
+    "flagged": 33,
+    "sessions": 35
+   },
+   "50-199 calls": {
+    "rate": 0.1154,
+    "ci95": [
+     0.0658,
+     0.1757
+    ],
+    "claims": 312,
+    "flagged": 36,
+    "sessions": 33
+   }
+  },
+  "by_split": {
+   "dev": {
+    "rate": 0.1327,
+    "ci95": [
+     0.0975,
+     0.1761
+    ],
+    "claims": 565,
+    "flagged": 75,
+    "sessions": 77
+   }
+  }
+ },
+ "checker_at_scale": {
+  "sessions": 1298,
+  "sessions_in_frame": 2301,
+  "reported_turns": 5180,
+  "claims": 4647,
+  "verdicts": {
+   "unbacked": 743,
+   "supported": 3819,
+   "contradicted": 85
+  },
+  "not_backed_basis": {
+   "none": 595,
+   "direct": 85,
+   "stale": 148
+  },
+  "not_backed": {
+   "rate": 0.1782,
+   "ci95": [
+    0.1637,
+    0.193
+   ],
+   "claims": 4647,
+   "flagged": 828,
+   "sessions": 1298
+  },
+  "by_kind": {
+   "build_pass": {
+    "rate": 0.4478,
+    "ci95": [
+     0.3239,
+     0.5775
+    ],
+    "claims": 67,
+    "flagged": 30,
+    "sessions": 56
+   },
+   "commit": {
+    "rate": 0.0736,
+    "ci95": [
+     0.0539,
+     0.0971
+    ],
+    "claims": 1060,
+    "flagged": 78,
+    "sessions": 642
+   },
+   "deployed": {
+    "rate": 0.6593,
+    "ci95": [
+     0.5682,
+     0.751
+    ],
+    "claims": 270,
+    "flagged": 178,
+    "sessions": 181
+   },
+   "file_change": {
+    "rate": 0.1902,
+    "ci95": [
+     0.1566,
+     0.2245
+    ],
+    "claims": 815,
+    "flagged": 155,
+    "sessions": 545
+   },
+   "installed": {
+    "rate": 0.2947,
+    "ci95": [
+     0.2165,
+     0.3855
+    ],
+    "claims": 190,
+    "flagged": 56,
+    "sessions": 132
+   },
+   "push": {
+    "rate": 0.3675,
+    "ci95": [
+     0.2849,
+     0.469
+    ],
+    "claims": 166,
+    "flagged": 61,
+    "sessions": 113
+   },
+   "ran": {
+    "rate": 0.0155,
+    "ci95": [
+     0.0,
+     0.0357
+    ],
+    "claims": 193,
+    "flagged": 3,
+    "sessions": 175
+   },
+   "test_pass": {
+    "rate": 0.2661,
+    "ci95": [
+     0.2235,
+     0.311
+    ],
+    "claims": 778,
+    "flagged": 207,
+    "sessions": 474
+   },
+   "typecheck_pass": {
+    "rate": 0.3,
+    "ci95": [
+     0.1111,
+     0.5
+    ],
+    "claims": 20,
+    "flagged": 6,
+    "sessions": 18
+   },
+   "verified": {
+    "rate": 0.0269,
+    "ci95": [
+     0.0134,
+     0.0437
+    ],
+    "claims": 670,
+    "flagged": 18,
+    "sessions": 431
+   },
+   "works": {
+    "rate": 0.0553,
+    "ci95": [
+     0.0333,
+     0.0798
+    ],
+    "claims": 398,
+    "flagged": 22,
+    "sessions": 294
+   }
+  },
+  "by_model": {
+   "claude-fable": {
+    "rate": 0.124,
+    "ci95": [
+     0.0758,
+     0.1769
+    ],
+    "claims": 242,
+    "flagged": 30,
+    "sessions": 79
+   },
+   "claude-haiku": {
+    "rate": 0.3902,
+    "ci95": [
+     0.2747,
+     0.5067
+    ],
+    "claims": 82,
+    "flagged": 32,
+    "sessions": 54
+   },
+   "claude-opus": {
+    "rate": 0.1702,
+    "ci95": [
+     0.1548,
+     0.1862
+    ],
+    "claims": 3532,
+    "flagged": 601,
+    "sessions": 887
+   },
+   "claude-opus-4.x": {
+    "rate": 0.2154,
+    "ci95": [
+     0.0833,
+     0.36
+    ],
+    "claims": 65,
+    "flagged": 14,
+    "sessions": 27
+   },
+   "claude-sonnet": {
+    "rate": 0.1752,
+    "ci95": [
+     0.1439,
+     0.2105
+    ],
+    "claims": 645,
+    "flagged": 113,
+    "sessions": 228
+   },
+   "gpt (codex)": {
+    "rate": 0.481,
+    "ci95": [
+     0.2973,
+     0.6429
+    ],
+    "claims": 79,
+    "flagged": 38,
+    "sessions": 21
+   }
+  },
+  "by_length": {
+   "1-9 calls": {
+    "rate": 0.3198,
+    "ci95": [
+     0.2676,
+     0.3747
+    ],
+    "claims": 419,
+    "flagged": 134,
+    "sessions": 239
+   },
+   "10-49 calls": {
+    "rate": 0.1834,
+    "ci95": [
+     0.1611,
+     0.2053
+    ],
+    "claims": 1788,
+    "flagged": 328,
+    "sessions": 636
+   },
+   "200+ calls": {
+    "rate": 0.3462,
+    "ci95": [
+     0.1935,
+     0.4375
+    ],
+    "claims": 52,
+    "flagged": 18,
+    "sessions": 9
+   },
+   "50-199 calls": {
+    "rate": 0.1457,
+    "ci95": [
+     0.1274,
+     0.1655
+    ],
+    "claims": 2388,
+    "flagged": 348,
+    "sessions": 524
+   }
+  },
+  "by_harness": {
+   "claude-code": {
+    "rate": 0.1729,
+    "ci95": [
+     0.1595,
+     0.1877
+    ],
+    "claims": 4568,
+    "flagged": 790,
+    "sessions": 1277
+   },
+   "codex": {
+    "rate": 0.481,
+    "ci95": [
+     0.303,
+     0.6421
+    ],
+    "claims": 79,
+    "flagged": 38,
+    "sessions": 21
+   }
+  }
+ },
+ "bootstrap": {
+  "resamples": 2000,
+  "seed": 7,
+  "unit": "session"
+ }
+}

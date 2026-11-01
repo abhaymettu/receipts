@@ -26,8 +26,8 @@ def findings_for_last_turn(path, report=None):
     if not session.turns:
         return session, []
     last = session.turns[-1]
-    if report and report.strip() and not last.report:
-        last.report = report
+    if report and report.strip():
+        last.report = report  # the transcript is written asynchronously and can lag the turn
     return session, [v for v in check_session(session, turns={last.idx}) if v.verdict != "supported"]
 
 

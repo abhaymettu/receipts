@@ -21,7 +21,7 @@ HEDGE = re.compile(
     r"\b(?:will|I'll|you'll|going to|should|would|could|might|may|probably|likely|perhaps|"
     r"maybe|plan(?:ned)? to|need(?:s|ed)? to|want(?:s|ed)? to|next step|todo|to do|"
     r"if|unless|once|when you|let me|can you|you can|try|hopefully|expect(?:ed)?|"
-    r"in case|whether|needs?|pending|remaining|left to)\b", re.I)
+    r"in case|whether|needs?|pending|remaining|left to|propose[sd]?|suggest(?:s|ed)?|recommend(?:s|ed)?|consider|option)\b", re.I)
 NEGATION = re.compile(
     r"\b(?:not|never|no longer|unverified|untested|unable|cannot|nothing (?:was|has been))\b|n't\b|"
     r"\bwithout (?:running|testing|verifying|checking)\b", re.I)
@@ -56,12 +56,14 @@ KINDS = [
         r"\bcommitted\b|\bcommit(?:ted)? (?:as|in)\b|\bin commit\b|\bnew commit\b|"
         r"\bcommit\s+`?[0-9a-f]{7,40}\b|\b(?:landed|lands) (?:in|as)\b", re.I)),
     ("ship", "deployed", re.compile(
-        r"\b(?:deployed|is (?:now )?live|went live|published|released)\b", re.I)),
-    ("ship", "installed", re.compile(r"\binstalled\b", re.I)),
+        r"\b(?:deployed|is (?:now )?live|went live|published)\b", re.I)),
+    ("ship", "installed", re.compile(
+        r"(?<!the )(?<!an )(?<!a )\b(?:installed|reinstalled)\b(?!\s+(?:version|copy|engine|base|build|binary|app|cli|command)\b)", re.I)),
     ("work", "works", re.compile(
         r"\b(?:now works|works now|works (?:correctly|as expected|end[- ]to[- ]end)|is working|are working|"
         r"(?:it|this|that|everything|all of (?:it|them)) works|"
-        r"(?:is|are|was|were|now) (?:fixed|resolved)|fixed\b|resolved\b)", re.I)),
+        r"(?:is|are|was|were|now|has been|have been|got) (?:fixed|resolved)|"
+        r"\bI (?:fixed|resolved)\b|^(?:Fixed|Resolved)\b|\((?:fixed|resolved)\)|(?:fixed|resolved):)", re.I)),
     ("work", "verified", re.compile(
         r"\b(?:verified|confirmed|double-checked|validated|smoke-tested|sanity-checked|tested)\b", re.I)),
     ("work", "ran", re.compile(

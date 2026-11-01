@@ -45,6 +45,11 @@ INSTALL = re.compile(
     r"\b(?:(?:pip3?|uv\s+pip|pipx|npm|pnpm|yarn|bun|brew|cargo|go|gem|apt(?:-get)?)\s+"
     r"(?:install|add|i)\b|uv\s+(?:add|sync|tool\s+install))", re.I)
 
+# Putting a built thing in place: copying a binary, loading a launch agent, linking a script.
+PLACE = re.compile(
+    r"\b(?:cp|mv|rsync|ln\s+-\w*s\w*|install\s+-|launchctl\s+(?:load|bootstrap|kickstart|enable)|"
+    r"chmod\s+\+x|brew\s+services|systemctl\s+(?:enable|restart|start))\b")
+
 # Commands that only look: a passing `ls` proves nothing ran.
 READ_ONLY = re.compile(
     r"^\s*(?:cd\s+\S+\s*&&\s*)?(?:ls|cat|head|tail|less|wc|grep|rg|find|fd|pwd|echo|which|"
@@ -80,8 +85,23 @@ _TEE = re.compile(r"\btee\s+(?:-a\s+)?([^\s|;&]+)")
 _MOVE = re.compile(r"\b(?:mv|cp|rm|touch|git\s+mv|git\s+rm|git\s+checkout\s+--)\s+(?:-\w+\s+)*([^|;&]+)")
 
 
+_HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1[^\n]*\n.*?\n\s*\2\s*(?:\n|$)", re.S)
+_QUOTED = re.compile(r"'[^'\n]*'|\"(?:[^\"\\\n]|\\.)*\"")
+
+
+def shape(cmd):
+    """The command with heredoc bodies and quoted strings blanked out.
+
+    `cat >> RUNLOG.md <<EOF ... ran the tests ... EOF` is a write, not a test run, and
+    `git commit -m "fix build"` is a commit, not a build. Classify on what is left.
+    """
+    cmd = _HEREDOC.sub(lambda m: m.group(0).split("\n", 1)[0] + "\n", cmd or "")
+    return _QUOTED.sub("''", cmd)
+
+
 def shell_writes(cmd):
     """File paths a shell command plausibly writes."""
+    cmd = shape(cmd)
     if not cmd:
         return []
     out = []
