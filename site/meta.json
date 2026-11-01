@@ -7,7 +7,7 @@
   "numbers": [
     {
       "value": "13.3%",
-      "label": "of 2,082 hand-labelled claims not backed by the agent's own receipts (95% CI 11.3 to 15.4)",
+      "label": "of 2,082 labelled claims (two Opus raters plus an adjudicator, author-audited) not backed by the agent's own receipts (95% CI 11.3 to 15.4)",
       "command": "python3 bench/stats.py",
       "source": "results/benchmark.json: labels.not_supported"
     },
