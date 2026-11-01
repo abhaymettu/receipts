@@ -167,7 +167,7 @@ def _relevant(claim, c):
         return True
     if re.search(r"playwright|preview_|browser|device_|screenshot", c.tool):
         return True
-    text = ("%s\n%s" % (c.cmd, c.output[:4000])).lower()
+    text = ("%s\n%s\n%s" % (c.cmd, " ".join(c.paths), c.output[:4000])).lower()
     return any(o in text for o in _objects(claim))
 
 
@@ -186,7 +186,7 @@ def _after_change(claim, calls, last_write, test, label):
     later = [c for c in pool if c.idx > last_write]
     if not later:
         return UNBACKED, "nothing was %s after the last code change" % label, pool[-1].idx, "stale"
-    if claim.kind == "works":
+    if claim.kind in ("works", "verified"):
         later = [c for c in later if _relevant(claim, c)]
         if not later:
             return UNBACKED, "nothing that ran after the last change exercises this claim", -1, "none"

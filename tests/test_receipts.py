@@ -185,3 +185,11 @@ def test_works_needs_a_run_that_bears_on_the_claim(tmp_path):
     assert verdicts(tmp_path, t) == [("works", "unbacked")]
     t = Transcript().user("fix").edit("/w/a.py").bash("pytest -q", "3 passed").say("The bug is fixed.")
     assert verdicts(tmp_path, t) == [("works", "supported")]
+
+
+def test_verified_needs_a_check_that_names_what_was_verified(tmp_path):
+    t = Transcript().user("fix").edit("/w/a.py").bash("ls /w", "a.py").say("I verified `slugify` handles spaces.")
+    assert ("verified", "unbacked") in verdicts(tmp_path, t)
+    t = Transcript().user("fix").edit("/w/a.py").bash("python3 -c 'from a import slugify'", "ok").say(
+        "I verified `slugify` handles spaces.")
+    assert ("verified", "supported") in verdicts(tmp_path, t)
