@@ -1,0 +1,18 @@
+{
+ "turns": 175,
+ "claims_A": 890,
+ "claims_B": 880,
+ "matched": 786,
+ "claim_set_f1": 0.8881,
+ "verdict_agreement": 0.9478,
+ "verdict_kappa": 0.7387,
+ "flag_kappa": 0.7569,
+ "verdict_pairs": {
+  "contradicted|contradicted": 1,
+  "supported|supported": 679,
+  "supported|unbacked": 16,
+  "unbacked|contradicted": 3,
+  "unbacked|supported": 22,
+  "unbacked|unbacked": 65
+ }
+}

@@ -1,0 +1,3 @@
+{"rulings_total": 239, "audited": 40, "audit_seed": 11, "author_agrees": 37, "author_reversed": 3,
+ "reversal_reason": "all three were findings read off tool output, which the rubric puts out of scope; the adjudicator had counted them as claims",
+ "note": "Only the audited sample was reversed; the other 199 rulings stand as the adjudicator made them."}
