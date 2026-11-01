@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "receipts"
+version = "1.0.0"
+description = "Check what a coding agent says it did against what it actually did."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Abhay Mettu"}]
+keywords = ["agents", "evals", "claude-code", "codex", "hooks", "reliability"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/abhaymettu/receipts"
+
+[project.scripts]
+receipts = "receipts.cli:main"
+
+[tool.setuptools]
+packages = ["receipts", "receipts.adapters"]
+
+[tool.setuptools.package-data]
+receipts = ["samples/*.jsonl"]

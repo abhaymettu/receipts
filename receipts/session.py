@@ -55,6 +55,7 @@ class Session:
     path: str
     harness: str
     session_id: str = ""
+    cwd: str = ""
     turns: list = field(default_factory=list)
 
     def calls_before(self, turn_idx):

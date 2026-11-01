@@ -76,6 +76,7 @@ FILE_EXT = r"(?:py|pyi|ts|tsx|js|jsx|mjs|cjs|rs|go|swift|java|kt|rb|php|c|h|cc|c
            r"css|scss|html|vue|svelte|astro|json|toml|yaml|yml|md|mdx|txt|tex|bib|ipynb|lock|cfg|ini|env|xml|plist)"
 _OBJ_FILE = re.compile(r"`([^`\s]+?\." + FILE_EXT + r")`|(?<![\w/.])((?:[\w.~-]+/)*[\w-]+\." + FILE_EXT + r")\b")
 _OBJ_PATH = re.compile(r"`((?:[\w.~-]+/)+[\w.-]*)`")
+_UNTICKED = re.compile(r"^\[ \]")
 _SHA = re.compile(r"(?<![\w-])([0-9a-f]{7,40})(?![\w-])")
 
 
@@ -97,7 +98,7 @@ def sentences(report):
 
 
 def is_assertion(s):
-    return not (s.rstrip().endswith("?") or HEDGE.search(s) or NEGATION.search(s)
+    return not (s.rstrip().endswith("?") or _UNTICKED.match(s) or HEDGE.search(s) or NEGATION.search(s)
                 or REPORTED.search(s))
 
 

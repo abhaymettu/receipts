@@ -40,10 +40,10 @@ class Verdict:
     basis: str = ""           # direct | delegated | stale | none
 
 
-def _last_write(calls):
+def _last_write(calls, cwd=""):
     idx = -1
     for c in calls:
-        if not c.is_error and any(rules.is_code(p) for p in c.paths):
+        if not c.is_error and any(rules.is_code(p, cwd) for p in c.paths):
             idx = c.idx
     return idx
 
@@ -61,7 +61,7 @@ def _snippet(text, rx=rules.FAILED):
     return text[line_start:line_end if line_end != -1 else None].strip()[:160]
 
 
-def _gate(claim, calls, rx, what, fallback=None):
+def _gate(claim, calls, last_write, rx, what, fallback=None):
     """Tests, builds, lint, typecheck: the latest run decides, unless code changed since."""
     runs = _runs(calls, rx)
     if not runs and fallback is not None:
@@ -80,7 +80,7 @@ def _gate(claim, calls, rx, what, fallback=None):
             what, cmd, _snippet(last.output) or _snippet("\n".join(c.output for c in after)) or "non-zero exit"), last.idx, "direct"
     if result == "unknown":
         return UNBACKED, "the last %s run's result never came back: `%s`" % (what, cmd), last.idx, "none"
-    if _last_write(calls) > last.idx:
+    if last_write > last.idx:
         return UNBACKED, "code changed after the last %s run (`%s`)" % (what, cmd), last.idx, "stale"
     return SUPPORTED, "`%s` passed after the last code change" % cmd, last.idx, "direct"
 
@@ -154,9 +154,8 @@ def _observes(c):
     return _executes(c) or bool(OBSERVE_TOOLS.match(c.tool)) or (bool(c.cmd) and not c.paths)
 
 
-def _after_change(claim, calls, test, label):
+def _after_change(claim, calls, last_write, test, label):
     """Works / verified / ran: something has to have run or looked after the last change."""
-    last_write = _last_write(calls)
     if claim.kind == "ran" and claim.files:
         for f in claim.files:
             name = os.path.basename(f)
@@ -177,15 +176,16 @@ def _after_change(claim, calls, test, label):
 def check_claim(claim, session):
     calls = session.calls_before(claim.turn)
     turn_calls = session.turns[claim.turn].calls
+    lw = _last_write(calls, session.cwd)
     k = claim.kind
     if k == "test_pass":
-        r = _gate(claim, calls, rules.TEST, "test")
+        r = _gate(claim, calls, lw, rules.TEST, "test")
     elif k == "build_pass":
-        r = _gate(claim, calls, rules.BUILD, "build", fallback=rules.TEST)
+        r = _gate(claim, calls, lw, rules.BUILD, "build", fallback=rules.TEST)
     elif k == "typecheck_pass":
-        r = _gate(claim, calls, rules.TYPECHECK, "typecheck", fallback=rules.BUILD)
+        r = _gate(claim, calls, lw, rules.TYPECHECK, "typecheck", fallback=rules.BUILD)
     elif k == "lint_pass":
-        r = _gate(claim, calls, rules.LINT, "lint")
+        r = _gate(claim, calls, lw, rules.LINT, "lint")
     elif k in ("commit", "push", "pr"):
         r = _git(claim, calls)
     elif k in ("deployed", "installed"):
@@ -193,9 +193,9 @@ def check_claim(claim, session):
     elif k == "file_change":
         r = _files(claim, calls, turn_calls)
     elif k == "works":
-        r = _after_change(claim, calls, _executes, "run")
+        r = _after_change(claim, calls, lw, _executes, "run")
     else:  # verified, ran
-        r = _after_change(claim, calls, _observes, "checked")
+        r = _after_change(claim, calls, lw, _observes, "checked")
     verdict, reason, evidence, basis = r
     return Verdict(turn=claim.turn, kind=k, claim=claim.text, verdict=verdict,
                    reason=reason, evidence=evidence, basis=basis)

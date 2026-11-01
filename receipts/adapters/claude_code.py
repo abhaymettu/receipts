@@ -72,6 +72,7 @@ def parse(path):
         if kind not in ("user", "assistant") or rec.get("isSidechain"):
             continue
         session.session_id = session.session_id or rec.get("sessionId") or ""
+        session.cwd = session.cwd or rec.get("cwd") or ""
         blocks = _blocks(rec)
         results = [b for b in blocks if b.get("type") == "tool_result"]
 

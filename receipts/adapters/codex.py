@@ -55,6 +55,7 @@ def parse(path):
         p = rec.get("payload") if isinstance(rec.get("payload"), dict) else {}
         if rec.get("type") == "session_meta":
             session.session_id = p.get("id") or p.get("session_id") or ""
+            session.cwd = p.get("cwd") or ""
             continue
         if rec.get("type") == "turn_context":
             model = p.get("model") or model

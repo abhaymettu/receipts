@@ -71,7 +71,7 @@ CODE_EXT = {
     ".toml", ".yaml", ".yml", ".lock", ".gradle", ".xml", ".proto", ".tex", ".ex", ".exs",
     ".scala", ".dart", ".lua", ".zig", ".hs", ".ml", ".jl", ".glsl", ".wgsl", ".ipynb",
 }
-_SCRATCH = re.compile(r"(?:^|/)(?:tmp|private/tmp|scratchpad|\.cache)/")
+_SCRATCH = re.compile(r"^(?:/private)?/tmp/|^/var/folders/|/scratchpad/|/\.cache/")
 
 # Targets of a shell write. Conservative: a path we cannot name is not a write.
 _REDIRECT = re.compile(r"(?<![0-9&<>])>>?\s*([^\s|;&<>()]+)")
@@ -93,8 +93,9 @@ def shell_writes(cmd):
             if p and not p.startswith(("/dev/", "&")) and p.strip("'\"") not in ("", "-")]
 
 
-def is_code(path):
-    if not path or _SCRATCH.search(path):
+def is_code(path, cwd=""):
+    """A source or config file, not a throwaway under a temp dir (unless the project lives there)."""
+    if not path or (_SCRATCH.search(path) and not (cwd and path.startswith(cwd))):
         return False
     return os.path.splitext(path)[1].lower() in CODE_EXT
 
