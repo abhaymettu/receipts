@@ -8,6 +8,10 @@ says the claim is unverified. It speaks at most once per turn (`stop_hook_active
   RECEIPTS_MODE=block   (default) block the stop and tell the agent
   RECEIPTS_MODE=warn    let the turn end, show the user a warning
   RECEIPTS_MODE=log     say nothing, append findings to ~/.claude/receipts/log.jsonl
+
+  RECEIPTS_ENGINE=rules (default) regex claims, deterministic rules, milliseconds
+  RECEIPTS_ENGINE=judge a model reads the receipts (RECEIPTS_MODEL, default sonnet);
+                        tens of seconds per turn, far more accurate on real sessions
 """
 
 import json
@@ -31,6 +35,23 @@ def findings_for_last_turn(path, report=None):
     return session, [v for v in check_session(session, turns={last.idx}) if v.verdict != "supported"]
 
 
+def judged_findings(path, report=None, model="sonnet"):
+    from .check import Verdict
+    from .judge import ask, dossier
+    session = load(path)
+    if not session.turns:
+        return session, []
+    last = session.turns[-1]
+    if report and report.strip():
+        last.report = report
+    if not last.report:
+        return session, []
+    labels = ask(dossier(session, last.idx), model) or []
+    return session, [Verdict(turn=last.idx, kind=g.get("family", ""), claim=g["span"], verdict=g["verdict"],
+                             reason=g.get("note", ""), basis=g.get("basis", ""))
+                     for g in labels if g.get("verdict") in ("unbacked", "contradicted")]
+
+
 def message(findings):
     lines = ["receipts: your report makes %d claim%s your own tool calls do not back:" % (
         len(findings), "" if len(findings) == 1 else "s")]
@@ -52,7 +73,11 @@ def main(stdin=sys.stdin, stdout=sys.stdout):
         return 0
     mode = os.environ.get("RECEIPTS_MODE", "block").lower()
     try:
-        session, findings = findings_for_last_turn(path, event.get("last_assistant_message"))
+        if os.environ.get("RECEIPTS_ENGINE", "rules") == "judge":
+            session, findings = judged_findings(path, event.get("last_assistant_message"),
+                                                os.environ.get("RECEIPTS_MODEL", "sonnet"))
+        else:
+            session, findings = findings_for_last_turn(path, event.get("last_assistant_message"))
     except Exception:  # a hook must never break the session it watches
         return 0
     ms = (time.perf_counter() - t0) * 1000

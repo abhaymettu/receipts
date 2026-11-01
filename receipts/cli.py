@@ -100,7 +100,7 @@ def scan(dirs, days=None, as_json=False):
                                               100.0 * (total[UNBACKED] + total[CONTRADICTED]) / n))
 
 
-def install_hook(project=False, mode="block"):
+def install_hook(project=False, mode="block", engine="rules"):
     path = os.path.join(".claude", "settings.json") if project else os.path.expanduser("~/.claude/settings.json")
     try:
         with open(path) as fh:
@@ -108,17 +108,17 @@ def install_hook(project=False, mode="block"):
     except (OSError, ValueError):
         settings = {}
     exe = shlex.quote(sys.executable)
-    command = "RECEIPTS_MODE=%s %s -m receipts.hook" % (mode, exe)
+    command = "RECEIPTS_MODE=%s RECEIPTS_ENGINE=%s %s -m receipts.hook" % (mode, engine, exe)
     stop = settings.setdefault("hooks", {}).setdefault("Stop", [])
     ours = [h for group in stop for h in group.get("hooks", []) if "receipts.hook" in h.get("command", "")]
     for h in ours:
         h["command"] = command
     if not ours:
-        stop.append({"hooks": [{"type": "command", "command": command, "timeout": 30}]})
+        stop.append({"hooks": [{"type": "command", "command": command, "timeout": 300 if engine == "judge" else 30}]})
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w") as fh:
         json.dump(settings, fh, indent=2)
-    print("Stop hook (%s mode) written to %s" % (mode, path))
+    print("Stop hook (%s mode, %s engine) written to %s" % (mode, engine, path))
 
 
 def main(argv=None):
@@ -142,6 +142,7 @@ def main(argv=None):
     i = sub.add_parser("install-hook")
     i.add_argument("--project", action="store_true", help="write .claude/settings.json here, not ~/.claude")
     i.add_argument("--mode", choices=["block", "warn", "log"], default="block")
+    i.add_argument("--engine", choices=["rules", "judge"], default="rules")
     a = ap.parse_args(argv)
 
     if a.cmd == "demo":
@@ -174,7 +175,7 @@ def main(argv=None):
         from .hook import main as hook_main
         return hook_main()
     elif a.cmd == "install-hook":
-        install_hook(a.project, a.mode)
+        install_hook(a.project, a.mode, a.engine)
     return 0
 
 
