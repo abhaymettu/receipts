@@ -1,6 +1,6 @@
 {
   "title": "Claims without receipts",
-  "summary": "How often coding agents claim work their own tool calls don't back (13% of claims in 2,301 real sessions), and a Stop hook that checks.",
+  "summary": "A checker that tests a coding agent's end-of-turn claims, like \"tests pass\", against the tool calls it actually made, and runs as a Claude Code Stop hook. Also a study of how often those claims go unbacked in real use (13% of claims in 2,301 sessions).",
   "repo": "https://github.com/abhaymettu/receipts",
   "paper_pdf": "paper/main.pdf",
   "hero_image": "docs/hero.png",

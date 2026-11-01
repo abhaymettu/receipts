@@ -1,8 +1,9 @@
 # Launch post draft (not posted)
 
-I checked 2,082 claims coding agents made about their own work against the tool calls in the same session.
+Coding agents end every turn with a report: "tests pass", "fixed", "committed". I built receipts, a Stop hook
+that checks each of those claims against the tool calls the agent actually made in the session.
 
-13% had no receipt behind them. "It works" was the worst at 37%, then "tests pass" at 23%. Outright
+Then I ran it over 2,082 claims from my own sessions. 13% had no receipt behind them. "It works" was the worst at 37%, then "tests pass" at 23%. Outright
 contradictions were rare, 5 in 2,082. Mostly the agent said it without current evidence.
 
 The existing fix is a Stop hook with pattern rules. I built one, tuned it for 15 rounds, and on held-out data it

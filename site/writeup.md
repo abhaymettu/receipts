@@ -1,7 +1,9 @@
 # Claims without receipts
 
 At the end of every turn a coding agent tells you what it did. "Tests pass." "Updated `config.py`." "Committed
-as `a41c9e2`." Most of the time I believe it and move on. I wanted to know how often that's a mistake.
+as `a41c9e2`." Most of the time I believe it and move on. I wanted to know how often that's a mistake, so I
+built `receipts`, a checker that reads the session and tests each claim against the tool calls the agent
+actually made. It runs as a Claude Code Stop hook and sends the agent back to work when a claim has no receipt.
 
 ## What I measured
 

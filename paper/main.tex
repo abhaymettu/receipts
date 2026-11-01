@@ -20,9 +20,11 @@
 
 \begin{abstract}
 At the end of each turn a coding agent tells its user what it did: ``tests pass'', ``I updated
-\texttt{config.py}'', ``committed as \texttt{a41c9e2}''. We ask how often those statements are not backed by
-the agent's own tool calls in the same session, and whether the deterministic receipt rules that several
-recent Stop-hook tools use can find the ones that are not. From 2,301 Claude Code and Codex sessions on one
+\texttt{config.py}'', ``committed as \texttt{a41c9e2}''. Most users believe the report and move on, so a claim
+the agent never checked is found only later. We built \texttt{receipts}, a checker that tests each claim
+against the agent's own tool calls in the same session, and used it to ask how often those statements are not
+backed, and whether the deterministic receipt rules that several recent Stop-hook tools use can find the ones
+that are not. From 2,301 Claude Code and Codex sessions on one
 developer's machine we drew 400 reported turns uniformly at random and labelled the 2,082 claims in them with
 two isolated model raters plus a third adjudicator on the held-out split, audited by the author. 13.3\% of
 claims are not backed by the agent's receipts (95\% CI 11.3 to 15.4, session bootstrap). Outright contradictions
@@ -32,7 +34,7 @@ of 1 to 9 tool calls, 13 to 20\% in longer ones). Our second finding is negative
 even after a 15-round climb on a development split, agree with careful readers at chance on held-out turns
 (verdict $\kappa \approx 0$, end-to-end flag precision 0.083 and recall 0.153 with model-assisted claim
 extraction). A model that reads the receipts does far better (Sonnet: flag precision 0.557, recall 0.315,
-verdict $\kappa$ 0.52). We release the checker, which runs as a Claude Code Stop hook in either mode, and the
+verdict $\kappa$ 0.52). We release the checker, which runs as a Claude Code Stop hook in either mode, with the
 benchmark pipeline.
 \end{abstract}
 
