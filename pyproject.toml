@@ -23,4 +23,4 @@ receipts = "receipts.cli:main"
 packages = ["receipts", "receipts.adapters"]
 
 [tool.setuptools.package-data]
-receipts = ["samples/*.jsonl"]
+receipts = ["samples/*.jsonl", "rubric.md"]

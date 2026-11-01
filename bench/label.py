@@ -28,8 +28,7 @@ from receipts.session import load  # noqa: E402
 OUT = os.path.join(ROOT, "data/label")
 SEED = 20261101
 N_TURNS = 400
-RUBRIC = open(os.path.join(ROOT, "bench/rubric.md")).read()
-EARLIER_CLIP, CURRENT_CLIP = 700, 2000
+RUBRIC = open(os.path.join(ROOT, "receipts/rubric.md")).read()
 
 
 def split_of(session):
@@ -51,35 +50,9 @@ def sample():
         len(picked), len(turns), sum(split_of(t["session"]) == "test" for t in picked)))
 
 
-def _clip(text, n):
-    text = (text or "").strip()
-    if len(text) <= n:
-        return text
-    return text[:n * 2 // 3] + "\n[...]\n" + text[-n // 3:]
-
-
 def dossier(row):
-    s = load(row["path"])
-    t = s.turns[row["turn"]]
-    out = ["USER PROMPT (turn %d)" % t.idx, "=" * 20, _clip(t.prompt, 3000), "",
-           "REPORT", "=" * 20, t.report, "", "RECEIPTS", "=" * 20]
-    for c in s.calls_before(t.idx):
-        cur = c.turn == t.idx
-        head = "[#%d turn %d%s] %s" % (c.idx, c.turn, "*" if cur else "", c.tool)
-        if c.cmd:
-            head += " $ " + _clip(c.cmd, 600)
-        elif c.target:
-            head += " " + c.target[:300]
-        if c.paths:
-            head += "\n  writes: " + ", ".join(c.paths)[:300]
-        status = "ERROR" if c.is_error else "ok"
-        if c.exit_code is not None:
-            status += " exit=%s" % c.exit_code
-        out.append(head + "\n  status: " + status)
-        body = _clip(c.output, CURRENT_CLIP if cur else EARLIER_CLIP)
-        if body:
-            out.append("  | " + body.replace("\n", "\n  | "))
-    return "\n".join(out) + "\n"
+    from receipts.judge import dossier as build
+    return build(load(row["path"]), row["turn"])
 
 
 def dossiers():

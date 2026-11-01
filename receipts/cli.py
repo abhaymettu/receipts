@@ -6,6 +6,9 @@
                                      transcript for the current directory
   receipts scan [DIR ...] [--days N] [--json]
                                      many sessions; default ~/.claude/projects and ~/.codex/sessions
+  receipts judge [TRANSCRIPT] [--turn N] [--model sonnet]
+                                     a model reads the receipts and rules on each claim
+                                     of one report (default: the last one); slower, better
   receipts hook                      Stop hook entry point (reads the hook event on stdin)
   receipts install-hook [--project] [--mode block|warn|log]
                                      add the Stop hook to Claude Code settings
@@ -131,6 +134,10 @@ def main(argv=None):
     s.add_argument("dirs", nargs="*")
     s.add_argument("--days", type=float)
     s.add_argument("--json", action="store_true")
+    j = sub.add_parser("judge")
+    j.add_argument("transcript", nargs="?")
+    j.add_argument("--turn", type=int)
+    j.add_argument("--model", default="sonnet")
     sub.add_parser("hook")
     i = sub.add_parser("install-hook")
     i.add_argument("--project", action="store_true", help="write .claude/settings.json here, not ~/.claude")
@@ -148,6 +155,21 @@ def main(argv=None):
         return 1 if any(v.verdict != SUPPORTED for v in verdicts) else 0
     elif a.cmd == "scan":
         scan(a.dirs, a.days, a.json)
+    elif a.cmd == "judge":
+        from .judge import judge
+        path = a.transcript or newest_transcript()
+        session, idx, labels = judge(path, a.turn, a.model)
+        if labels is None:
+            print("judge call failed (is the `claude` CLI installed and logged in?)", file=sys.stderr)
+            return 2
+        print("%s  turn %s, %d claims (judge: %s)" % (path, idx, len(labels), a.model))
+        for g in labels:
+            v = g.get("verdict", "?")
+            print("  %-14s %-9s %s" % (_paint(v, MARK.get(v, v)) if v in MARK else v, g.get("family", ""),
+                                       g["span"][:110]))
+            if g.get("note"):
+                print("  %s-> %s" % (" " * 24, g["note"][:200]))
+        return 1 if any(g.get("verdict") != SUPPORTED for g in labels) else 0
     elif a.cmd == "hook":
         from .hook import main as hook_main
         return hook_main()

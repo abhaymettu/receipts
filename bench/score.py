@@ -202,13 +202,21 @@ def main():
         res = evaluate(load_rater("A"), rows("dev"))
     elif what == "test":
         res = evaluate(load_rater("gold"), rows("test"))
+    elif what.startswith("judge:"):
+        # An LLM judge that reads the receipts itself (rater-style output) scored as a system.
+        rater = what.split(":", 1)[1]
+        sysl = load_rater(rater)
+        global system_claims
+        system_claims = lambda row: [dict(g, kind=g["family"]) for g in sysl.get(row["id"], [])]  # noqa: E731
+        res = evaluate(load_rater("gold"), [r for r in rows("test") if r["id"] in sysl])
     elif what == "agreement":
         res = agreement(load_rater("A"), load_rater("B"), rows("test"))
     else:
         raise SystemExit("dev | test | agreement")
     print(json.dumps(res, indent=1))
-    if what in ("test", "agreement"):
-        with open(os.path.join(ROOT, "results", "validity_%s.json" % what), "w") as fh:
+    if what in ("test", "agreement") or what.startswith("judge:"):
+        name = what.replace(":", "_") + ("_llm" if what == "test" and EXTRACTOR == "llm" else "")
+        with open(os.path.join(ROOT, "results", "validity_%s.json" % name), "w") as fh:
             json.dump(res, fh, indent=1)
 
 
