@@ -319,3 +319,8 @@ instructions for other harnesses.
   howpublished = {\url{https://huggingface.co/datasets/abhaymettu/assertion-gate}}
 }
 ```
+
+## Raw data withdrawn
+
+The claim texts and label files from the five pilot sessions were removed on 2026-11-01. They quoted personal details
+from the sessions they were drawn from. The pilot's aggregate result above stands; the code is kept for reference.
