@@ -161,6 +161,8 @@ unbacked. This version replaces it with a sampled, labelled benchmark.
 ## More
 
 - Paper: [`paper/main.pdf`](paper/main.pdf)
+- Pull requests: [receipts-github](https://github.com/abhaymettu/receipts-github) checks the same claims against a pull
+  request's diff and checks, as a [GitHub App](https://github.com/apps/receipts-github/installations/new) or an Action
 - For coding agents working in this repo: [`AGENTS.md`](AGENTS.md)
 - Tests: `python -m pytest -q tests`
 - License: MIT
